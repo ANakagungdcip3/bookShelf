@@ -8,6 +8,9 @@
 import Foundation
 import UIKit
 
-class ModalAddBooks{
+class ModalAddController: UIViewController{
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
     
 }
