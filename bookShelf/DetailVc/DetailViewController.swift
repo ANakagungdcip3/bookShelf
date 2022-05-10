@@ -10,16 +10,25 @@ import UIKit
 
 class DetailViewController: UIViewController{
     
-    var contentText: [String?] = []
-    var bookDatabase: [BooksDatabase] = []
+//    var bookDatabase: [BooksDatabase] = []
     @IBOutlet weak var addImage: UIImageView!
     @IBOutlet weak var descField: UITextView!
     @IBOutlet weak var pageField: UITextField!
     @IBOutlet weak var statusField: UITextField!
+    @IBOutlet weak var titleField: UITextField!
+    
+    var descBook: String = ""
+    var bookTitle: String = ""
+    var bookStatus: String = ""
+    var pageStatus: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        descField.text = contentText[1]
+        descField.text = descBook
+        pageField.text = pageStatus
+        statusField.text = bookStatus
+        titleField.text = bookTitle
+        
+        }
     }
     
-}
