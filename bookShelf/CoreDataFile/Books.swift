@@ -13,8 +13,8 @@ class Books: NSManagedObject{
     @NSManaged var iD: NSNumber!
     @NSManaged var descBook: NSString!
     @NSManaged var imageBook: NSData!
-    @NSManaged var pageBook: NSNumber!
-    @NSManaged var statusBook: NSDate?
+    @NSManaged var pageBook: NSString!
+    @NSManaged var statusBook: NSString!
     @NSManaged var titleBook: NSString!
 }
 

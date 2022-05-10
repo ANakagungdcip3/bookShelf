@@ -15,11 +15,20 @@ class DetailViewController: UIViewController{
     @IBOutlet weak var descField: UITextView!
     @IBOutlet weak var pageField: UITextField!
     @IBOutlet weak var statusField: UITextField!
-    var desc: String = ""
+    @IBOutlet weak var titleField: UITextField!
+    
+    var descBook: String = ""
+    var bookTitle: String = ""
+    var bookStatus: String = ""
+    var pageStatus: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        descField.text = desc
+        descField.text = descBook
+        pageField.text = pageStatus
+        statusField.text = bookStatus
+        titleField.text = bookTitle
+        
         }
     }
     

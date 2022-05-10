@@ -7,14 +7,15 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 protocol passDataHome: AnyObject{
-    func passBook(Books : BooksDatabase)
+    func passBook()
 }
-
 
 class ModalAddController: UIViewController, UITextViewDelegate{
     
+    weak var delegate: passDataHome?
     @IBOutlet weak var descField: UITextView!
     @IBOutlet weak var bookImage: UIImageView!
     @IBOutlet weak var titleField: UITextField!
@@ -23,15 +24,16 @@ class ModalAddController: UIViewController, UITextViewDelegate{
     var bookTitle: String = ""
     var bookStatus: String = ""
     var pageStatus: String = ""
-    
-    
-    var bookList: BooksDatabase?
-    weak var delegate: passDataHome?
-    let debugContent = "my content at row"
+    var bookDesc: String = ""
     let debugImage = UIImage(named:"Asset1")
+    //context for CoreData
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.title = "Add Books"
         super.viewDidLoad()
+        descField.delegate = self
         self.titleField.text = ""
         self.statusField.text = ""
         self.pageField.text = ""
@@ -39,47 +41,40 @@ class ModalAddController: UIViewController, UITextViewDelegate{
 
     
     @IBAction func doneBut(_ sender: Any) {
-        if bookTitle == ""{
-            fatalError()
+        if (bookTitle == "") && (bookStatus == "") && (pageStatus == ""){
+            dismiss(animated: true)
         }
-
-        else if bookStatus == ""{
-            fatalError()
+        else{
+            addModel()
+            dismiss(animated: true){
+            self.delegate?.passBook()
+            }
         }
-
-        else if pageStatus == ""{
-            fatalError()
-        }
-
-
-        addModel()
-//        performSegue(withIdentifier: "AddModalSegue", sender: self)
-        
-//        print(bookTitle)
-//        print(bookStatus)
-//        print(pageStatus)
-        
-        dismiss(animated: true){
-            print(self.bookList?.bookTitles)
-            self.delegate?.passBook(Books: self.bookList!)
-            
-        }
-        
     }
-    
     
     func addModel(){
         
-//                print(bookTitle)
-//                print(bookStatus)
-//                print(pageStatus)
+        let entity = NSEntityDescription.entity(forEntityName: "Books", in: context)
+        let newBooks = Books(entity: entity!, insertInto: context)
+        newBooks.descBook = self.bookDesc
+        newBooks.iD = Int32(bookDatabase.count)
+        let imageData : Data = debugImage!.pngData()!
+        newBooks.imageBook = imageData
+        newBooks.pageBook = self.pageStatus
+        newBooks.statusBook = self.bookStatus
+        newBooks.titleBook = self.bookTitle
         
-        self.bookList = BooksDatabase(assetBooks: debugImage!, bookTitles: self.bookTitle , pageTitles: self.pageStatus , statusTitle: self.bookStatus )
+        do{
+            try context.save()
+            bookDatabase.append(newBooks)
+        }
         
-//        print(bookList?.bookTitles)
-        
+        catch{
+            print("Error while saving")
+        }
+}
     
-    }
+        
     
     @IBAction func titleField(_ sender: Any) {
         self.bookTitle = titleField.text ?? ""
@@ -91,4 +86,14 @@ class ModalAddController: UIViewController, UITextViewDelegate{
     @IBAction func statusField(_ sender: Any) {
         self.bookStatus = statusField.text ?? ""
     }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        descField.text = ""
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        self.bookDesc = descField.text ?? ""
+    }
+    
+
 }

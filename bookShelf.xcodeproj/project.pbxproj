@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30320DED281A69CD0032E4A8 /* BooksDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30320DEC281A69CD0032E4A8 /* BooksDatabase.swift */; };
 		30320DEF281A78AD0032E4A8 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30320DEE281A78AD0032E4A8 /* DetailViewController.swift */; };
 		30320DF3281A990C0032E4A8 /* ModalAddController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30320DF2281A990C0032E4A8 /* ModalAddController.swift */; };
 		30320DF6281AF3F80032E4A8 /* ModalAdd.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30320DF4281AF3F80032E4A8 /* ModalAdd.storyboard */; };
@@ -19,11 +18,11 @@
 		30337260281A34D100D52F7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3033725F281A34D100D52F7B /* Assets.xcassets */; };
 		30337263281A34D100D52F7B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30337261281A34D100D52F7B /* LaunchScreen.storyboard */; };
 		30367082281D14C800B30A87 /* BooksAppCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 30367080281D14C800B30A87 /* BooksAppCoreData.xcdatamodeld */; };
-		30367084281D199100B30A87 /* Books.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30367083281D199100B30A87 /* Books.swift */; };
+		3084B6E22828135A0097DB30 /* Books+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3084B6E02828135A0097DB30 /* Books+CoreDataClass.swift */; };
+		3084B6E32828135A0097DB30 /* Books+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3084B6E12828135A0097DB30 /* Books+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		30320DEC281A69CD0032E4A8 /* BooksDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksDatabase.swift; sourceTree = "<group>"; };
 		30320DEE281A78AD0032E4A8 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		30320DF2281A990C0032E4A8 /* ModalAddController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAddController.swift; sourceTree = "<group>"; };
 		30320DF5281AF3F80032E4A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = bookShelf/Base.lproj/ModalAdd.storyboard; sourceTree = "<group>"; };
@@ -37,7 +36,8 @@
 		30337262281A34D100D52F7B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		30337264281A34D100D52F7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		30367081281D14C800B30A87 /* Books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Books.xcdatamodel; sourceTree = "<group>"; };
-		30367083281D199100B30A87 /* Books.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Books.swift; sourceTree = "<group>"; };
+		3084B6E02828135A0097DB30 /* Books+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Books+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3084B6E12828135A0097DB30 /* Books+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Books+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +91,6 @@
 				30337256281A34D000D52F7B /* AppDelegate.swift */,
 				30337258281A34D000D52F7B /* SceneDelegate.swift */,
 				3033725A281A34D000D52F7B /* ViewController.swift */,
-				30320DEC281A69CD0032E4A8 /* BooksDatabase.swift */,
 				3033725C281A34D000D52F7B /* Main.storyboard */,
 				30320DFA281AF7FE0032E4A8 /* DetailVc */,
 				30320DF7281AF5DC0032E4A8 /* ModallAdd */,
@@ -106,8 +105,9 @@
 		30367085281D1A5600B30A87 /* CoreDataFile */ = {
 			isa = PBXGroup;
 			children = (
+				3084B6E02828135A0097DB30 /* Books+CoreDataClass.swift */,
+				3084B6E12828135A0097DB30 /* Books+CoreDataProperties.swift */,
 				30367080281D14C800B30A87 /* BooksAppCoreData.xcdatamodeld */,
-				30367083281D199100B30A87 /* Books.swift */,
 			);
 			path = CoreDataFile;
 			sourceTree = "<group>";
@@ -186,12 +186,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				30320DF3281A990C0032E4A8 /* ModalAddController.swift in Sources */,
-				30367084281D199100B30A87 /* Books.swift in Sources */,
 				3033725B281A34D000D52F7B /* ViewController.swift in Sources */,
-				30320DED281A69CD0032E4A8 /* BooksDatabase.swift in Sources */,
 				30320DEF281A78AD0032E4A8 /* DetailViewController.swift in Sources */,
 				30337257281A34D000D52F7B /* AppDelegate.swift in Sources */,
 				30337259281A34D000D52F7B /* SceneDelegate.swift in Sources */,
+				3084B6E32828135A0097DB30 /* Books+CoreDataProperties.swift in Sources */,
+				3084B6E22828135A0097DB30 /* Books+CoreDataClass.swift in Sources */,
 				30367082281D14C800B30A87 /* BooksAppCoreData.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -343,6 +343,7 @@
 		30337268281A34D100D52F7B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -372,6 +373,7 @@
 		30337269281A34D100D52F7B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;

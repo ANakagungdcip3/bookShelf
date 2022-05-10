@@ -7,33 +7,67 @@
 
 import Foundation
 import UIKit
+import CoreData
 
+var bookDatabase = [Books]()
+var longPressed = false
 
 //implement/protocol/subscribe
-class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, passDataHome{
+class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, passDataHome{
     
-    var bookDatabase: [BooksDatabase] = [
-        BooksDatabase(assetBooks: UIImage(named: "Asset1")!, bookTitles: "Milk and Honey", pageTitles: "ada1", statusTitle: "ada"),
-        BooksDatabase(assetBooks: UIImage(named: "Asset1")!, bookTitles: "Milk and Honey", pageTitles: "ada2", statusTitle: "ada"),
-        BooksDatabase(assetBooks: UIImage(named: "Asset1")!, bookTitles: "Milk and Honey", pageTitles: "ada3", statusTitle: "ada")
-    ]
+    
+//    var bookDatabase: [BooksDatabase] = [
+//        BooksDatabase(assetBooks: UIImage(named: "Asset1")!, bookTitles: "Milk and Honey", pageTitles: "ada1", statusTitle: "ada"),
+//        BooksDatabase(assetBooks: UIImage(named: "Asset1")!, bookTitles: "Milk and Honey", pageTitles: "ada2", statusTitle: "ada"),
+//        BooksDatabase(assetBooks: UIImage(named: "Asset1")!, bookTitles: "Milk and Honey", pageTitles: "ada3", statusTitle: "ada")
+//    ]
     
     let assetBooks = ["Asset1", "Asset2", "Asset3", "Asset4"]
-    let titles = ["Milk and Honey", "This is a Title", "Nice man1", "Nice man4"]
-    let debugContent = "my content at row"
+//    let titles = ["Milk and Honey", "This is a Title", "Nice man1", "Nice man4"]
+//    let debugContent = "my content at row"
+    var firstLoad = true
     @IBOutlet weak var collectionViewBooks: UICollectionView!
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(firstLoad)
+        {
+            firstLoad=false
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Books")
+            do {
+                let results:NSArray = try context.fetch(request) as NSArray
+                for result in results
+                {
+                    let book = result as! Books
+                    bookDatabase.append(book)
+                }
+            }
+            catch
+            {
+                print("Fetch Failed")
+            }
+            
+            handleLongPress()
+            if longPressed == true{
+                collectionViewBooks.reloadData()
+            }
+            else if longPressed == false{
+                return
+            }
+            
+    }
+            
         for book in 0 ..< bookDatabase.count {
             print(bookDatabase[book])
         }
+        
         collectionViewBooks.dataSource = self
         collectionViewBooks.delegate = self
     }
     
     @IBAction func addButton(_ sender: Any) {
-        
         performSegue(withIdentifier: "AddModalSegue", sender: nil)
     }
     
@@ -41,10 +75,14 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     //ngebuat si reusable cell isinya bakal gimana, pakenya identifier buat nama class
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionViewBooks.dequeueReusableCell(withReuseIdentifier: "postCell", for: indexPath) as! PostCell
+        
+        let thisBook : Books!
+        thisBook = bookDatabase[indexPath.row]
+        
         cell.bookImage.image = UIImage(named: assetBooks[0])
-        cell.tBook.text = bookDatabase[indexPath.row].bookTitles
-        cell.tPage.text = bookDatabase[indexPath.row].pageTitles
-        cell.tDesc.text = "What a nice books..."
+        cell.tBook.text = thisBook.titleBook as String?
+        cell.tPage.text = thisBook.pageBook as String?
+        cell.tDesc.text = thisBook.descBook as String?
         return cell
     }
     
@@ -61,15 +99,62 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         guard let destinationVC = storyboard?.instantiateViewController(withIdentifier: "DetailViewSB") as? DetailViewController else {
             return
         }
-        destinationVC.desc = bookDatabase[indexPath.row].bookTitles!
+        destinationVC.bookTitle = bookDatabase[indexPath.row].titleBook! as String
+        destinationVC.bookStatus = bookDatabase[indexPath.row].statusBook! as String
+        destinationVC.pageStatus = bookDatabase[indexPath.row].pageBook! as String
+        destinationVC.descBook = bookDatabase[indexPath.row].descBook! as String
+        
         navigationController?.pushViewController(destinationVC, animated: true)
     }
     
+    private func handleLongPress(){
+        longPressed = true
+        let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gestureRecognizer:)))
+            longPressedGesture.minimumPressDuration = 0.5
+            longPressedGesture.delegate = self
+            longPressedGesture.delaysTouchesBegan = true
+            collectionViewBooks?.addGestureRecognizer(longPressedGesture)
+        
+        }
     
-    func passBook(Books: BooksDatabase) {
-        bookDatabase.append(Books)
-        print(bookDatabase.count)
+    @objc func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
+        if (gestureRecognizer.state != .began) {
+            return
+        }
+
+        let p = gestureRecognizer.location(in: self.collectionViewBooks)
+
+        if let indexPath = self.collectionViewBooks?.indexPathForItem(at: p) {
+            print("Long press at item: \(indexPath.row)")
+            
+            let sheet = UIAlertController(title: "Edit Action", message: nil, preferredStyle: .actionSheet)
+            sheet.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: {[weak self] _ in
+                self?.deleteModel(item: bookDatabase[indexPath.row])
+                self?.collectionViewBooks.reloadData()
+            }))
+            
+            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {action in print("Cancelled")}
+            ))
+            
+            self.present(sheet, animated: true)
+        }
+    }
+    
+    //function buat ngereload doang si
+    func passBook() {
         collectionViewBooks.reloadData()
+    }
+    
+    func deleteModel(item: Books){
+        context.delete(item)
+        
+        do{
+            try context.save()
+            passBook()
+        }
+        catch{
+            print("Error while updating")
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -78,15 +163,14 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
 //                destinationVC.bookDatabase = self.bookDatabase
 //            }
 //        }
-        
+
          if segue.identifier == "AddModalSegue"{
-            
+
             let destinationVC = segue.destination as? ModalAddController
             destinationVC?.delegate = self
         }
     }
 }
-    
 
 class PostCell: UICollectionViewCell{
     @IBOutlet weak var bookImage: UIImageView!

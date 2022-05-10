@@ -4,8 +4,8 @@
         <attribute name="descBook" optional="YES" attributeType="String"/>
         <attribute name="iD" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="imageBook" optional="YES" attributeType="Binary"/>
-        <attribute name="pageBook" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="statusBook" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="pageBook" optional="YES" attributeType="String"/>
+        <attribute name="statusBook" optional="YES" attributeType="String"/>
         <attribute name="titleBook" optional="YES" attributeType="String"/>
     </entity>
     <elements>
