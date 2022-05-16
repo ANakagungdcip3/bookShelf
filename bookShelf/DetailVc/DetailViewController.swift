@@ -21,6 +21,7 @@ class DetailViewController: UIViewController{
     var bookTitle: String = ""
     var bookStatus: String = ""
     var pageStatus: String = ""
+    var bookImage: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,7 @@ class DetailViewController: UIViewController{
         pageField.text = pageStatus
         statusField.text = bookStatus
         titleField.text = bookTitle
-        
+        addImage.image = bookImage
         }
     }
     

@@ -78,8 +78,10 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         
         let thisBook : Books!
         thisBook = bookDatabase[indexPath.row]
+        let tempImageBox = UIImage.create(data: thisBook.imageBook) ?? UIImage.create(named: "Asset1")
+//        let tempImageBox = UIImage(data: thisBook.imageBook!)
         
-        cell.bookImage.image = UIImage(named: assetBooks[0])
+        cell.bookImage.image = tempImageBox
         cell.tBook.text = thisBook.titleBook as String?
         cell.tPage.text = thisBook.pageBook as String?
         cell.tDesc.text = thisBook.descBook as String?
@@ -99,10 +101,15 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         guard let destinationVC = storyboard?.instantiateViewController(withIdentifier: "DetailViewSB") as? DetailViewController else {
             return
         }
-        destinationVC.bookTitle = bookDatabase[indexPath.row].titleBook! as String
-        destinationVC.bookStatus = bookDatabase[indexPath.row].statusBook! as String
-        destinationVC.pageStatus = bookDatabase[indexPath.row].pageBook! as String
-        destinationVC.descBook = bookDatabase[indexPath.row].descBook! as String
+        let thisBook : Books!
+        thisBook = bookDatabase[indexPath.row]
+        let tempImageBox =  UIImage.create(data: thisBook.imageBook) ?? UIImage.create(named: "Asset1")
+        
+        destinationVC.bookImage = tempImageBox
+        destinationVC.bookTitle = thisBook.titleBook! as String
+        destinationVC.bookStatus = thisBook.statusBook! as String
+        destinationVC.pageStatus = thisBook.pageBook! as String
+        destinationVC.descBook = thisBook.descBook! as String
         
         navigationController?.pushViewController(destinationVC, animated: true)
     }
@@ -128,9 +135,10 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             print("Long press at item: \(indexPath.row)")
             
             let sheet = UIAlertController(title: "Edit Action", message: nil, preferredStyle: .actionSheet)
-            sheet.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: {[weak self] _ in
-                self?.deleteModel(item: bookDatabase[indexPath.row])
-                self?.collectionViewBooks.reloadData()
+            sheet.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: {_ in
+                //handle delete item in core data and cell
+                self.deleteModel(item: bookDatabase[indexPath.item], path: indexPath)
+                self.collectionViewBooks.deleteItems(at: [indexPath])
             }))
             
             sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {action in print("Cancelled")}
@@ -145,12 +153,11 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         collectionViewBooks.reloadData()
     }
     
-    func deleteModel(item: Books){
+    func deleteModel(item: Books, path: IndexPath){
         context.delete(item)
-        
+        bookDatabase.remove(at: path.item)
         do{
             try context.save()
-            passBook()
         }
         catch{
             print("Error while updating")
@@ -169,6 +176,19 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             let destinationVC = segue.destination as? ModalAddController
             destinationVC?.delegate = self
         }
+    }
+}
+
+//Handling UIImage coredata wrapping
+extension UIImage {
+    static func create(data: Data?) -> UIImage? {
+         guard let data = data else { return nil }
+         return UIImage(data: data)
+    }
+
+    static func create(named: String?) -> UIImage? {
+         guard let string = named else { return nil }
+         return UIImage(named: string)
     }
 }
 
